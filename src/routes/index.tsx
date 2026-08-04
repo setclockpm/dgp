@@ -8,5 +8,5 @@ export const Route = createFileRoute('/')({
 
 function App() {
 
-  return null
+  return <h1>Welcome to the DGP App</h1>
 }
