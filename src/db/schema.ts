@@ -1,7 +1,7 @@
-import { boolean, numeric, pgTable, serial, smallint, text, timestamp, varchar, integer } from 'drizzle-orm/pg-core'
+import { pgTable, boolean, numeric, smallint, serial, text, timestamp, varchar, integer ,uuid,} from 'drizzle-orm/pg-core'
 
 export const gameSlots = pgTable('gameSlots', {
-  id: serial().primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   gameSlotStatusId: integer('game_slot_status_id').references(() => gameSlotStatuses.id),
   gameStatusId: integer('game_status_id').references(() => gameStatuses.id),
   gameGuideId: integer('game_guide_id').references(() => employees.id),
