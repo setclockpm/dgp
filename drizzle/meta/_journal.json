@@ -8,6 +8,20 @@
       "when": 1787263871113,
       "tag": "0000_nasty_the_renegades",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789773403304,
+      "tag": "0001_funny_junta",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789785760429,
+      "tag": "0002_lovely_the_hunter",
+      "breakpoints": true
     }
   ]
 }
