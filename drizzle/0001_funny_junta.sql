@@ -1,0 +1,1 @@
+ALTER TABLE "games" ADD COLUMN "abbrev" varchar(5) NOT NULL DEFAULT 'XXXX';

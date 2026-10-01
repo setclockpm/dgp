@@ -24,6 +24,7 @@ export const gameSlots = pgTable('gameSlots', {
 export const games = pgTable('games', {
   id: serial().primaryKey(),
   name: text('name').notNull(),
+  abbrev: varchar('abbrev', { length: 5 }).notNull().default('XXXX'),
   difficulty: numeric('difficulty').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at')
@@ -33,6 +34,16 @@ export const games = pgTable('games', {
 })
 
 export const gameStatuses = pgTable('gameStatuses', {
+  id: serial().primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
+})
+
+export const guestStatuses = pgTable('guestStatuses', {
   id: serial().primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
   createdAt: timestamp('created_at').defaultNow(),
