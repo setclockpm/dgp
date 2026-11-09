@@ -7,7 +7,7 @@ export const gameSlots = pgTable('gameSlots', {
   gameGuideId: integer('game_guide_id').references(() => employees.id),
   giveawayId: integer('giveaway_id').references(() => giveawayTypes.id),
   gameId: integer("game_id").references(() => games.id),
-  numGuests: smallint('num_guests').notNull(),
+  numGuests: smallint('num_guests'),
   textSent: boolean('text_sent').default(false),
   seApCall: boolean('se_ap_call').default(false),
   seApCallNotes: text('se_ap_call_notes'),
