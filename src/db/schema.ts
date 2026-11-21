@@ -2,8 +2,8 @@ import { pgTable, boolean, numeric, smallint, serial, text, timestamp, varchar, 
 
 export const gameSlots = pgTable('gameSlots', {
   id: uuid('id').primaryKey().defaultRandom(),
-  gameSlotStatusId: integer('game_slot_status_id').references(() => gameSlotStatuses.id),
-  gameStatusId: integer('game_status_id').references(() => gameStatuses.id),
+  gameSlotStatusId: integer('game_slot_status_id').references(() => gameSlotStatuses.id).default(1),
+  gameStatusId: integer('game_status_id').references(() => gameStatuses.id).default(1),
   gameGuideId: integer('game_guide_id').references(() => employees.id),
   giveawayId: integer('giveaway_id').references(() => giveawayTypes.id),
   gameId: integer("game_id").references(() => games.id),
@@ -26,51 +26,26 @@ export const games = pgTable('games', {
   name: text('name').notNull(),
   abbrev: varchar('abbrev', { length: 5 }).notNull().default('XXXX'),
   difficulty: numeric('difficulty').notNull(),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at')
-    .defaultNow()
-    .notNull()
-    .$onUpdate(() => new Date()),
 })
 
 export const gameStatuses = pgTable('gameStatuses', {
   id: serial().primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at')
-    .defaultNow()
-    .notNull()
-    .$onUpdate(() => new Date()),
 })
 
 export const guestStatuses = pgTable('guestStatuses', {
   id: serial().primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at')
-    .defaultNow()
-    .notNull()
-    .$onUpdate(() => new Date()),
 })
 
 export const gameSlotStatuses = pgTable('gameSlotStatuses', {
   id: serial().primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at')
-    .defaultNow()
-    .notNull()
-    .$onUpdate(() => new Date()),
 })
 
 export const giveawayTypes = pgTable('giveawayTypes', {
   id: serial().primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at')
-    .defaultNow()
-    .notNull()
-    .$onUpdate(() => new Date()),
 })
 
 export const employees = pgTable('employees', {
