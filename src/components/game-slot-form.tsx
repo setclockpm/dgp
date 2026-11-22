@@ -1,16 +1,16 @@
 import { useRef, useState } from 'react';
+import type { SubmitEventHandler } from 'react';
+import { redirect } from '@tanstack/react-router';
+import { PlusIcon } from 'lucide-react';
 import TimeInputWithIcon from './ui/time-input-with-icon'
 
 import { Button } from './ui/button';
 import { LoadingSwap } from './ui/loading-swap';
-import { PlusIcon } from 'lucide-react';
-import { createServerFn, useServerFn } from '@tanstack/react-start';
-import { gameSlots } from '#/db/schema';
-import { db } from "@/db";
-import { redirect } from '@tanstack/react-router';
-import type { SubmitEventHandler } from 'react';
-import { z } from "zod";
 import { DatePickerWithIcon } from './ui/date-picker-with-icon';
+import { createServerFn, useServerFn } from '@tanstack/react-start';
+import { db } from "@/db";
+import { gameSlots } from '#/db/schema';
+import { z } from "zod";
 
 
 const addGameSlot = createServerFn({ method: 'POST' }).inputValidator(z.object({ scheduledTime: z.iso.datetime()})).handler(async({ data }) => {
@@ -32,18 +32,19 @@ export function GameSlotForm() {
         e.preventDefault()
         const gameScheduledTime = timeRef.current?.value;
         const inputtedDate = dateRef.current?.value;
+
+        if (!gameScheduledTime || !inputtedDate) return;
+
+        const formattedDate = inputtedDate.split('T')[0] + 'T' + gameScheduledTime + '.000Z';
         
-        if (inputtedDate) {
-            const dateObj = new Date(inputtedDate)
-            console.log('Formatted date selected:', inputtedDate)
-            console.log('Date selected to iso:', dateObj.toString())
-        }
-        console.log('gameScheduledTime', gameScheduledTime)
+        // console.log('gameScheduledTime', gameScheduledTime)
+        // console.log('Inputted date selected:', inputtedDate)
+        // console.log('Date and time formatted to iso:', formattedDate)
 
         if (!gameScheduledTime) return;
 
         setIsLoading(true)
-        await addGameSlotFn({ data: { scheduledTime: new Date(gameScheduledTime).toLocaleString('en-US') } })
+        await addGameSlotFn({ data: { scheduledTime: formattedDate } })
         setIsLoading(false)
     }
 

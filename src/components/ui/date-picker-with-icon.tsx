@@ -39,14 +39,13 @@ export function DatePickerWithIcon(params: { ref: React.Ref<HTMLInputElement>, l
                         onSelect={(selectedDate) => {
                             setDate(selectedDate)
                             setOpen(false)
-                            // setISOFormattedDate(selectedDate)
                             setValue(selectedDate?.toISOString())
                         }}
                     />
                     
                 </PopoverContent>
             </Popover>
-            <Input ref={params.ref} value={value} onChange={(e) => setValue(e.target.value)} />
+            <Input hidden ref={params.ref} value={value} onChange={(e) => setValue(e.target.value)} />
         </div>
     )
 }

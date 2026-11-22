@@ -3,10 +3,9 @@ import { db } from '@/db'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '#/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { EditIcon, ListTodoIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '#/components/ui/empty'
-// import type { GameSlot } from '#/types'
 
 const serverLoader = createServerFn({ method: 'GET' }).handler(() => {
   return db.query.gameSlots.findMany()
@@ -16,6 +15,9 @@ export const Route = createFileRoute('/')({
   component: App,
   loader: () => {
     return serverLoader()
+  },
+  notFoundComponent: () => {
+    return <p>This index page doesn't exist!</p>
   },
 })
 
@@ -29,14 +31,14 @@ function App() {
     <div className='flex justify-between items-center gap-4'>
       <div className='space-y-2'>
         <h1 className='text-2xl font-bold'>Daily Game Plan</h1>
-        {totalBookedCount > 0 && (
+        {gameSlots.length > 0 && (
           <Badge variant="outline">
             {totalBookedCount} booked
           </Badge>
         )}
       </div>
       <div>
-        <Button size='sm' asChild>
+        <Button variant="outline" size='sm' asChild>
           <Link to='/gameSlots/new'> <PlusIcon />Add New Game Slot</Link>
         </Button>
       </div>
@@ -47,7 +49,7 @@ function App() {
 }
 
 function isBooked(gameStatus:number | null) {
-  return gameStatus === 1 || gameStatus === 2 || gameStatus === 3 || gameStatus === 4 || gameStatus === 5
+  return gameStatus === 6 || gameStatus === 2 || gameStatus === 3 || gameStatus === 4 || gameStatus === 5
 }
 
 function GameSlotTable({ gameSlots }: { 
@@ -68,7 +70,6 @@ function GameSlotTable({ gameSlots }: {
     updatedAt: Date
   }>}) {
 
-  // const bookedCount = gameSlots.filter((slot) => isBooked(slot.gameStatusId)).length
 
   if (gameSlots.length === 0) {
       return (
