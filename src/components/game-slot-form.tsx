@@ -20,6 +20,7 @@ const addGameSlot = createServerFn({ method: 'POST' }).inputValidator(z.object({
     throw redirect({ to: '/' })
 } );
 
+
 export function GameSlotForm() {
     const timeRef = useRef<HTMLInputElement>(null);
     const dateRef = useRef<HTMLInputElement>(null);
@@ -30,13 +31,14 @@ export function GameSlotForm() {
     const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
         const gameScheduledTime = timeRef.current?.value;
-        const dgpDate = dateRef.current?.value;
+        const inputtedDate = dateRef.current?.value;
         
-        if (dgpDate) {
-            console.log('Today is', new Date(dgpDate).toLocaleString() + "" )
+        if (inputtedDate) {
+            const dateObj = new Date(inputtedDate)
+            console.log('Formatted date selected:', inputtedDate)
+            console.log('Date selected to iso:', dateObj.toString())
         }
         console.log('gameScheduledTime', gameScheduledTime)
-        // console.log('gameScheduledTime', new Date(gameScheduledTime).toLocaleString('en-US'))
 
         if (!gameScheduledTime) return;
 
