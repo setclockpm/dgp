@@ -36,12 +36,6 @@ export function GameSlotForm() {
         if (!gameScheduledTime || !inputtedDate) return;
 
         const formattedDate = inputtedDate.split('T')[0] + 'T' + gameScheduledTime + '.000Z';
-        
-        // console.log('gameScheduledTime', gameScheduledTime)
-        // console.log('Inputted date selected:', inputtedDate)
-        // console.log('Date and time formatted to iso:', formattedDate)
-
-        if (!gameScheduledTime) return;
 
         setIsLoading(true)
         await addGameSlotFn({ data: { scheduledTime: formattedDate } })

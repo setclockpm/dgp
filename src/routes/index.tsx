@@ -1,11 +1,14 @@
 // src/routes/index.tsx
 import { db } from '@/db'
+import { format } from "date-fns"
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { EditIcon, ListTodoIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '#/components/ui/empty'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Checkbox } from "@/components/ui/checkbox"
 
 const serverLoader = createServerFn({ method: 'GET' }).handler(() => {
   return db.query.gameSlots.findMany()
@@ -52,26 +55,38 @@ function isBooked(gameStatus:number | null) {
   return gameStatus === 6 || gameStatus === 2 || gameStatus === 3 || gameStatus === 4 || gameStatus === 5
 }
 
+function toLocalTimeString(date: Date | null) {
+  if (!date) return ''
+  const dateLocal = new Date(date);
+  const newDate = new Date(
+    dateLocal.getTime() + dateLocal.getTimezoneOffset() * 60 * 1000
+  );
+  return format(newDate, 'p')
+}
+
 function GameSlotTable({ gameSlots }: { 
   gameSlots: Array<{
     id: string
     gameSlotStatusId: number | null
-    gameStatusId: number | null
-    gameGuideId: number | null
+    scheduledTime: Date | null
     gameId: number | null
-    giveawayId: number | null
     numGuests: number| null
+    gameStatusId: number | null
+    guestStatusId: number | null
+    gameGuideId: number | null
+    guestNotes: string | null
+    shiftNotes: string | null
+    giveawayId: number | null
     textSent: boolean | null
     seApCall: boolean | null
     seApCallNotes: string | null
-    gameNotes: string | null
+    replays: number | null
     createdAt: Date | null
-    scheduledTime: Date | null
     updatedAt: Date
   }>}) {
 
 
-  if (gameSlots.length === 0) {
+    if (gameSlots.length === 0) {
       return (
         <Empty className='border border-dashed'>
           <EmptyHeader>
@@ -90,5 +105,49 @@ function GameSlotTable({ gameSlots }: {
       )
     }
       
+    return (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{String.fromCodePoint(0x1F551)}</TableHead>
+            <TableHead>Time</TableHead>
+            <TableHead>Game</TableHead>
+            <TableHead># Guests</TableHead>
+            <TableHead>Game Status</TableHead>
+            <TableHead>Guest Status</TableHead>
+            <TableHead>Game Guide</TableHead>
+            <TableHead>Guest Notes</TableHead>
+            <TableHead>Shift Notes</TableHead>
+            <TableHead>Giveaway</TableHead>
+            <TableHead>Text Sent?</TableHead>
+            <TableHead>SE AP Call?</TableHead>
+            <TableHead>SE AP Call Notes</TableHead>
+            <TableHead >Replays</TableHead>
+            <TableHead>$0.00</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {gameSlots.map((slot) => (
+            <TableRow key={slot.id}>
+              <TableCell><Checkbox/></TableCell>
+              <TableCell>{toLocalTimeString(slot.scheduledTime)}</TableCell>
+              <TableCell>{slot.gameId}</TableCell>
+              <TableCell>{slot.numGuests}</TableCell>
+              <TableCell>{slot.gameStatusId}</TableCell>
+              <TableCell>{slot.guestStatusId}</TableCell>
+              <TableCell>{slot.gameGuideId}</TableCell>
+              <TableCell>{slot.guestNotes}</TableCell>
+              <TableCell>{slot.shiftNotes}</TableCell>
+              <TableCell>{slot.giveawayId}</TableCell>
+              <TableCell>{slot.seApCallNotes}</TableCell>
+              <TableCell>{slot.textSent ? 'Yes' : 'No'}</TableCell>
+              <TableCell>{slot.seApCall ? 'Yes' : 'No'}</TableCell>
+              <TableCell>{slot.seApCallNotes}</TableCell>
+              <TableCell>{slot.replays}</TableCell>
+              <TableCell>$0.00</TableCell>
+          </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    )
   }
-
